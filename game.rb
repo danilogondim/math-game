@@ -4,6 +4,7 @@ class Game
     @player_2 = Player.new("Player 2")
     @players = []
     @turn = 1
+    @current_player = ""
 
   end
 
@@ -11,9 +12,14 @@ class Game
     @player_1.get_name
     @player_2.get_name
     puts "Alright, #{@player_1.name} and #{@player_2.name}! Let's do some math!!"
+    @players << @player_1
+    @players << @player_2
+    @current_player = @players.rotate!(rand(2)).first
+    p @current_player.name
   end
 
   def new_turn
+    @current_player = @players.rotate!.first
     puts "----- TURN #{@turn} -----"
 
   end
@@ -23,7 +29,8 @@ class Game
   end
 
   def game_over
-    puts " wins with a score of 1/3"
+    @current_player = @players.last
+    puts "#{@current_player.name} wins with a score of #{@current_player.lives}/3"
     puts "----- GAME OVER -----"
     puts "Good bye!"
   end
@@ -34,7 +41,8 @@ class Game
 
     until @player_1.is_dead? || @player_2.is_dead?
       new_turn
-      @player_1.lose_life
+      p @current_player.name
+      @current_player.lose_life
       score
     end
     
